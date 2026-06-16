@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almoxarifado - Controle de Estoque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { 600: '#0d9488', 700: '#0f766e' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-slate-700 antialiased">
+
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-brand-600 flex items-center justify-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-900 leading-tight">Almoxarifado</h1>
+                <p class="text-xs text-slate-500">Controle de estoque &middot; Enfermagem</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-8">
+
+        <section class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-6 mb-8">
+            <h2 class="text-base font-semibold text-slate-900 mb-1">Cadastrar material</h2>
+            <p class="text-sm text-slate-500 mb-5">Adicione um novo item ao estoque.</p>
+            <form id="form-material" class="flex flex-col gap-4 sm:flex-row sm:items-end">
+                <div class="flex-1">
+                    <label for="input-nome" class="block text-sm font-medium text-slate-700 mb-1.5">Nome do material</label>
+                    <input type="text" id="input-nome"
+                        class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition"
+                        placeholder="Ex: Seringa 10ml" required>
+                </div>
+                <div class="w-full sm:w-40">
+                    <label for="input-quantidade" class="block text-sm font-medium text-slate-700 mb-1.5">Quantidade</label>
+                    <input type="number" id="input-quantidade" min="0"
+                        class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition"
+                        placeholder="0" required>
+                </div>
+                <button type="submit" id="btn-cadastrar"
+                    class="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg px-5 py-2.5 shadow-sm transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Cadastrar
+                </button>
+            </form>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200">
+                <h2 class="text-base font-semibold text-slate-900">Materiais em estoque</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                            <th class="py-3 px-6 font-medium">Nome</th>
+                            <th class="py-3 px-6 font-medium text-right">Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-materiais" class="divide-y divide-slate-100">
+                        <!-- As linhas sao inseridas dinamicamente pelo main.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
