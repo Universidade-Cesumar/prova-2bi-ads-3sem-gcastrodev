@@ -27,7 +27,7 @@ async function carregarMateriais() {
         if (materiais.length === 0) {
             listaMateriais.innerHTML = `
                 <tr>
-                    <td colspan="2" class="py-10 px-6 text-center text-slate-400">
+                    <td colspan="3" class="py-10 px-6 text-center text-slate-400">
                         Nenhum material cadastrado ainda.
                     </td>
                 </tr>
@@ -44,6 +44,18 @@ async function carregarMateriais() {
                     <span class="inline-flex items-center rounded-full bg-brand-600/10 text-brand-700 px-2.5 py-0.5 text-xs font-semibold">
                         ${material.quantidade}
                     </span>
+                </td>
+                <td class="py-3 px-6">
+                    <div class="flex items-center justify-end gap-2">
+                        <button type="button" class="btn-baixar inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg px-3 py-1.5 transition-colors"
+                            data-id="${material.id}" data-estoque="${material.quantidade}">
+                            Baixar
+                        </button>
+                        <button type="button" class="btn-excluir inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg px-3 py-1.5 transition-colors"
+                            data-id="${material.id}">
+                            Excluir
+                        </button>
+                    </div>
                 </td>
             `;
             listaMateriais.appendChild(linha);
