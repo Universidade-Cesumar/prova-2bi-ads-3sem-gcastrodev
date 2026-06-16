@@ -83,9 +83,31 @@ async function cadastrarMaterial(evento) {
     carregarMateriais();
 }
 
+async function excluirMaterial(id) {
+    try {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        carregarMateriais();
+    } catch (erro) {
+        console.error("Erro ao excluir material:", erro);
+    }
+}
+
+// Usa delegacao de eventos: como os botoes sao criados dinamicamente, ouvimos
+// os cliques na tabela e identificamos qual botao foi acionado.
+function tratarCliqueLista(evento) {
+    const botaoExcluir = evento.target.closest(".btn-excluir");
+    if (botaoExcluir) {
+        const id = botaoExcluir.dataset.id;
+        if (confirm("Tem certeza que deseja excluir este material?")) {
+            excluirMaterial(id);
+        }
+    }
+}
+
 // So liga os eventos e busca os dados quando rodando no navegador (com fetch
 // disponivel). Isso evita que os testes unitarios quebrem ao importar o arquivo.
 if (typeof fetch !== "undefined" && form) {
     form.addEventListener("submit", cadastrarMaterial);
+    listaMateriais.addEventListener("click", tratarCliqueLista);
     carregarMateriais();
 }
