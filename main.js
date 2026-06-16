@@ -83,6 +83,34 @@ async function cadastrarMaterial(evento) {
     carregarMateriais();
 }
 
+async function baixarEstoque(id, estoqueAtual) {
+    const inputRetirada = document.getElementById("input-retirada");
+    const quantidadeRetirada = Number(inputRetirada.value);
+
+    if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+        alert(
+            "Quantidade invalida. Informe um valor maior que zero e que nao " +
+            "ultrapasse o estoque disponivel (" + estoqueAtual + ")."
+        );
+        return;
+    }
+
+    const novoEstoque = estoqueAtual - quantidadeRetirada;
+
+    try {
+        await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantidade: novoEstoque }),
+        });
+
+        inputRetirada.value = "";
+        carregarMateriais();
+    } catch (erro) {
+        console.error("Erro ao baixar estoque:", erro);
+    }
+}
+
 async function excluirMaterial(id) {
     try {
         await fetch(`${API_URL}/${id}`, { method: "DELETE" });
@@ -95,6 +123,14 @@ async function excluirMaterial(id) {
 // Usa delegacao de eventos: como os botoes sao criados dinamicamente, ouvimos
 // os cliques na tabela e identificamos qual botao foi acionado.
 function tratarCliqueLista(evento) {
+    const botaoBaixar = evento.target.closest(".btn-baixar");
+    if (botaoBaixar) {
+        const id = botaoBaixar.dataset.id;
+        const estoqueAtual = Number(botaoBaixar.dataset.estoque);
+        baixarEstoque(id, estoqueAtual);
+        return;
+    }
+
     const botaoExcluir = evento.target.closest(".btn-excluir");
     if (botaoExcluir) {
         const id = botaoExcluir.dataset.id;
