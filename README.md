@@ -4,7 +4,7 @@
 
 > **🌐 Projeto no ar:** https://universidade-cesumar.github.io/prova-2bi-ads-3sem-gcastrodev/
 >
-> _(Publicado via GitHub Pages — o deploy é feito automaticamente a cada `push` pelo workflow [`deploy-pages.yml`](.github/workflows/deploy-pages.yml).)_
+> _(Publicado via GitHub Pages — deploy automático a cada `push` no branch principal.)_
 
 Sistema web simples para controle de estoque de um almoxarifado de enfermagem.
 Permite **cadastrar materiais**, **listar** o estoque atual, **dar baixa** (retirada)
@@ -116,7 +116,6 @@ menor ou igual a zero, ou maior que o estoque atual).
 │   ├── sprint2.test.js
 │   └── sprint3.test.js
 ├── .github/workflows/
-│   ├── classroom.yml      # Autograding (testes por sprint)
-│   └── deploy-pages.yml   # Deploy automático no GitHub Pages
+│   └── classroom.yml      # Autograding (testes por sprint)
 └── README.md
 ```
