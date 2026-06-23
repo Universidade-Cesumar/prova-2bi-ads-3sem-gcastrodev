@@ -4,6 +4,11 @@ const form = document.getElementById("form-material");
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
 const listaMateriais = document.getElementById("lista-materiais");
+const inputBusca = document.getElementById("input-busca");
+const totalItens = document.getElementById("total-itens");
+
+// Guarda a ultima lista vinda da API para filtrar a busca sem refazer o GET.
+let materiaisCache = [];
 
 // Regra de negocio: so permite retirar uma quantidade positiva e que nao
 // ultrapasse o estoque disponivel. Retorna true (valida) ou false (invalida).
@@ -20,25 +25,42 @@ function validarRetirada(estoqueAtual, quantidadeRetirada) {
 async function carregarMateriais() {
     try {
         const resposta = await fetch(API_URL);
-        const materiais = await resposta.json();
+        materiaisCache = await resposta.json();
+        renderizarMateriais(materiaisCache);
+    } catch (erro) {
+        console.error("Erro ao carregar materiais:", erro);
+        listaMateriais.innerHTML = `
+            <tr>
+                <td colspan="3" class="py-10 px-6 text-center text-rose-500">
+                    Nao foi possivel carregar os materiais. Verifique sua conexao
+                    com a internet e tente novamente.
+                </td>
+            </tr>
+        `;
+    }
+}
 
-        listaMateriais.innerHTML = "";
+// Recebe uma lista (completa ou filtrada), desenha a tabela e atualiza o
+// contador do dashboard com o total de itens exibidos.
+function renderizarMateriais(materiais) {
+    listaMateriais.innerHTML = "";
+    totalItens.textContent = materiais.length;
 
-        if (materiais.length === 0) {
-            listaMateriais.innerHTML = `
-                <tr>
-                    <td colspan="3" class="py-10 px-6 text-center text-slate-400">
-                        Nenhum material cadastrado ainda.
-                    </td>
-                </tr>
-            `;
-            return;
-        }
+    if (materiais.length === 0) {
+        listaMateriais.innerHTML = `
+            <tr>
+                <td colspan="3" class="py-10 px-6 text-center text-slate-400">
+                    Nenhum material encontrado.
+                </td>
+            </tr>
+        `;
+        return;
+    }
 
-        materiais.forEach((material) => {
-            const linha = document.createElement("tr");
-            linha.className = "hover:bg-slate-50 transition-colors";
-            linha.innerHTML = `
+    materiais.forEach((material) => {
+        const linha = document.createElement("tr");
+        linha.className = "hover:bg-slate-50 transition-colors";
+        linha.innerHTML = `
                 <td class="py-3 px-6 font-medium text-slate-800">${material.nome}</td>
                 <td class="py-3 px-6 text-right">
                     <span class="inline-flex items-center rounded-full bg-brand-600/10 text-brand-700 px-2.5 py-0.5 text-xs font-semibold">
@@ -58,11 +80,17 @@ async function carregarMateriais() {
                     </div>
                 </td>
             `;
-            listaMateriais.appendChild(linha);
-        });
-    } catch (erro) {
-        console.error("Erro ao carregar materiais:", erro);
-    }
+        listaMateriais.appendChild(linha);
+    });
+}
+
+// Filtra a lista em memoria pelo nome digitado na barra de pesquisa.
+function filtrarMateriais() {
+    const termo = inputBusca.value.trim().toLowerCase();
+    const filtrados = materiaisCache.filter((material) =>
+        material.nome.toLowerCase().includes(termo)
+    );
+    renderizarMateriais(filtrados);
 }
 
 async function cadastrarMaterial(evento) {
@@ -145,5 +173,6 @@ function tratarCliqueLista(evento) {
 if (typeof fetch !== "undefined" && form) {
     form.addEventListener("submit", cadastrarMaterial);
     listaMateriais.addEventListener("click", tratarCliqueLista);
+    inputBusca.addEventListener("input", filtrarMateriais);
     carregarMateriais();
 }
