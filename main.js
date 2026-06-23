@@ -60,10 +60,25 @@ function renderizarMateriais(materiais) {
     materiais.forEach((material) => {
         const linha = document.createElement("tr");
         linha.className = "hover:bg-slate-50 transition-colors";
+
+        // Alerta visual: marca a linha como estoque critico quando o saldo
+        // estiver abaixo de 10 unidades.
+        const estoqueBaixo = material.quantidade < 10;
+        if (estoqueBaixo) {
+            linha.classList.add("estoque-critico");
+        }
+
+        const corBadge = estoqueBaixo
+            ? "bg-rose-100 text-rose-700"
+            : "bg-brand-600/10 text-brand-700";
+
         linha.innerHTML = `
-                <td class="py-3 px-6 font-medium text-slate-800">${material.nome}</td>
+                <td class="py-3 px-6 font-medium text-slate-800">
+                    ${material.nome}
+                    ${estoqueBaixo ? '<span class="ml-2 text-xs font-semibold text-rose-600">estoque baixo</span>' : ""}
+                </td>
                 <td class="py-3 px-6 text-right">
-                    <span class="inline-flex items-center rounded-full bg-brand-600/10 text-brand-700 px-2.5 py-0.5 text-xs font-semibold">
+                    <span class="inline-flex items-center rounded-full ${corBadge} px-2.5 py-0.5 text-xs font-semibold">
                         ${material.quantidade}
                     </span>
                 </td>

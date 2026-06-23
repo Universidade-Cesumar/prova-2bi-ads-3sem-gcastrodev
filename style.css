@@ -1,1 +1,12 @@
 /* Caso queira utilizar framework como Bootstrap para estilização, pode utilizar. Basta ignoar esse arquivo */
+
+/* Alerta visual de estoque baixo: aplicado via JS nas linhas com
+   quantidade menor que 10 (class="estoque-critico"). */
+.estoque-critico {
+    background-color: #fff1f2; /* rose-50 */
+    box-shadow: inset 4px 0 0 #e11d48; /* faixa rose-600 a esquerda */
+}
+
+.estoque-critico:hover {
+    background-color: #ffe4e6; /* rose-100 */
+}
