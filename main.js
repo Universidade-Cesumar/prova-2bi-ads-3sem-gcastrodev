@@ -116,14 +116,22 @@ async function cadastrarMaterial(evento) {
         quantidade: Number(inputQuantidade.value),
     };
 
-    await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(novoMaterial),
-    });
+    try {
+        await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(novoMaterial),
+        });
 
-    form.reset();
-    carregarMateriais();
+        form.reset();
+        carregarMateriais();
+    } catch (erro) {
+        console.error("Erro ao cadastrar material:", erro);
+        alert(
+            "Nao foi possivel cadastrar o material. Verifique sua conexao com " +
+            "a internet e tente novamente."
+        );
+    }
 }
 
 async function baixarEstoque(id, estoqueAtual) {
